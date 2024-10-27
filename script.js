@@ -21,20 +21,6 @@ const loveSong = document.getElementById('loveSong');
 const container = document.querySelector('.container');
 
 yesButton.addEventListener('click', async () => {
-    // Get current date and time
-    const currentDate = new Date().toLocaleString();
-    
-    // Log notification message to the console
-    const notificationMessage = `
-🎉 Love Proposal Accepted! 🎉
-    
-Time: ${currentDate}
-Status: Accepted ✅
-Message: Someone just said YES to the love proposal! 💝
-`;
-
-    console.log(notificationMessage); // Log to console instead of sending to Telegram
-
     // Show success message and play the song
     container.innerHTML = `
         <h1>Yay! I Love You Too! ❤️</h1>
