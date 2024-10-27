@@ -14,34 +14,56 @@ const messages = [
 let noButtonClickCount = 0;
 const maxNoClicks = 5;
 
+// Telegram Configuration
+const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // Replace with your bot token
+const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     // Replace with your chat ID
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
 const customMessage = document.getElementById('customMessage');
 const loveSong = document.getElementById('loveSong');
-const container = document.querySelector('.container'); // Ensure the container is selected
+const container = document.querySelector('.container');
+
+// Function to send Telegram notification
+async function sendTelegramNotification(message) {
+    try {
+        const response = await fetch(TELEGRAM_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            })
+        });
+
+        if (response.ok) {
+            console.log("Notification sent to Telegram!");
+        } else {
+            console.error("Failed to send Telegram notification:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error sending Telegram notification:", error);
+    }
+}
 
 yesButton.addEventListener('click', async () => {
-    // Notify administrator via GitHub webhook
-    const response = await fetch('https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO_NAME/dispatches', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': 'token YOUR_GITHUB_TOKEN', // Use a personal access token
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            event_type: 'user_clicked_yes',
-            client_payload: {
-                message: 'User  clicked Yes on the love proposal!'
-            }
-        })
-    });
+    // Get current date and time
+    const currentDate = new Date().toLocaleString();
+    
+    // Send notification to Telegram
+    const notificationMessage = `
+🎉 <b>Love Proposal Accepted!</b> 🎉
+    
+Time: ${currentDate}
+Status: Accepted ✅
+Message: Someone just said YES to the love proposal! 💝
+`;
 
-    if (response.ok) {
-        console.log("Notification sent to GitHub!");
-    } else {
-        console.error("Failed to send notification to GitHub:", response.statusText);
-    }
+    await sendTelegramNotification(notificationMessage);
 
     // Show success message and play the song
     container.innerHTML = `
@@ -50,7 +72,12 @@ yesButton.addEventListener('click', async () => {
         <p class="custom-message">You just made my day! 🌈</p>
         <div class="hearts-celebration"></div>
     `;
-    loveSong.play();
+
+    try {
+        await loveSong.play();
+    } catch (error) {
+        console.error("Error playing audio:", error);
+    }
 });
 
 noButton.addEventListener('click', () => {
@@ -64,6 +91,7 @@ noButton.addEventListener('click', () => {
     // Move the No button to a random position
     const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
     const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+    noButton.style.position = 'absolute';
     noButton.style.top = `${y}px`;
     noButton.style.left = `${x}px`;
     
