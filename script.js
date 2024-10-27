@@ -15,9 +15,9 @@ let noButtonClickCount = 0;
 const maxNoClicks = 5;
 
 // Telegram Configuration
-const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // Replace with your bot token
-const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     // Replace with your chat ID
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+const TELEGRAM_BOT_TOKEN = '7855556264:AAFXkgWPbzLzboLNbkZau5rnInup1uRxoTs'; // Replace with your bot token
+const TELEGRAM_CHAT_ID = '5179975368';     // Replace with your chat ID
+const TELEGRAM_API_URL = `https://api.telegram.org/bot7855556264:AAFXkgWPbzLzboLNbkZau5rnInup1uRxoTs/sendMessage`;
 
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
