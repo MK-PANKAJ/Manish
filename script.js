@@ -18,11 +18,36 @@ const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
 const customMessage = document.getElementById('customMessage');
 const loveSong = document.getElementById('loveSong');
+const container = document.querySelector('.container'); // Ensure the container is selected
 
-yesButton.addEventListener('click', () => {
+yesButton.addEventListener('click', async () => {
+    // Notify administrator via GitHub webhook
+    const response = await fetch('https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO_NAME/dispatches', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': 'token YOUR_GITHUB_TOKEN', // Use a personal access token
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            event_type: 'user_clicked_yes',
+            client_payload: {
+                message: 'User  clicked Yes on the love proposal!'
+            }
+        })
+    });
+
+    if (response.ok) {
+        console.log("Notification sent to GitHub!");
+    } else {
+        console.error("Failed to send notification to GitHub:", response.statusText);
+    }
+
+    // Show success message and play the song
     container.innerHTML = `
         <h1>Yay! I Love You Too! ❤️</h1>
         <p class="success-message">Thank you for making me the happiest person! 🎉</p>
+        <p class="custom-message">You just made my day! 🌈</p>
         <div class="hearts-celebration"></div>
     `;
     loveSong.play();
@@ -39,7 +64,7 @@ noButton.addEventListener('click', () => {
     // Move the No button to a random position
     const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
     const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-    noButton .style.top = `${y}px`;
+    noButton.style.top = `${y}px`;
     noButton.style.left = `${x}px`;
     
     // Show a random message
