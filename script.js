@@ -14,56 +14,26 @@ const messages = [
 let noButtonClickCount = 0;
 const maxNoClicks = 5;
 
-// Telegram Configuration
-const TELEGRAM_BOT_TOKEN = '7855556264:AAFXkgWPbzLzboLNbkZau5rnInup1uRxoTs'; // Replace with your bot token
-const TELEGRAM_CHAT_ID = '5179975368';     // Replace with your chat ID
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${7855556264:AAFXkgWPbzLzboLNbkZau5rnInup1uRxoTs}/sendMessage`;
-
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
 const customMessage = document.getElementById('customMessage');
 const loveSong = document.getElementById('loveSong');
 const container = document.querySelector('.container');
 
-// Function to send Telegram notification
-async function sendTelegramNotification(message) {
-    try {
-        const response = await fetch(TELEGRAM_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CHAT_ID,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-
-        if (response.ok) {
-            console.log("Notification sent to Telegram!");
-        } else {
-            console.error("Failed to send Telegram notification:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Error sending Telegram notification:", error);
-    }
-}
-
 yesButton.addEventListener('click', async () => {
     // Get current date and time
     const currentDate = new Date().toLocaleString();
     
-    // Send notification to Telegram
+    // Log notification message to the console
     const notificationMessage = `
-🎉 <b>Love Proposal Accepted!</b> 🎉
+🎉 Love Proposal Accepted! 🎉
     
 Time: ${currentDate}
 Status: Accepted ✅
 Message: Someone just said YES to the love proposal! 💝
 `;
 
-    await sendTelegramNotification(notificationMessage);
+    console.log(notificationMessage); // Log to console instead of sending to Telegram
 
     // Show success message and play the song
     container.innerHTML = `
@@ -77,6 +47,7 @@ Message: Someone just said YES to the love proposal! 💝
         await loveSong.play();
     } catch (error) {
         console.error("Error playing audio:", error);
+        customMessage.textContent = "Oops! It seems the love song couldn't be played. 🎶";
     }
 });
 
