@@ -1,9 +1,9 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #ff7e5f; /* Solid background color */
+    background-color: #ffcccb; /* Light pink background */
     text-align: center;
     padding: 20px; /* Reduced padding for mobile */
-    color: #fff;
+    color: #800000; /* Dark red text color */
     margin: 0; /* Remove default margin */
 }
 
@@ -17,13 +17,15 @@ body {
 }
 
 h1 {
-    font-size: 2.2em; /* Adjusted font size for mobile */
+    font-size: 2.5em; /* Adjusted font size for mobile */
     margin-bottom: 10px;
+    color: #d5006d; /* Pink color for the heading */
 }
 
 p {
-    font-size: 1.2em;
+    font-size: 1.5em;
     margin: 15px 0; /* Adjusted margin for mobile */
+    color: #b22222; /* Firebrick color for the paragraph */
 }
 
 .buttons {
@@ -32,7 +34,7 @@ p {
 
 button {
     padding: 12px 20px; /* Adjusted padding for mobile */
-    font-size: 1.1em; /* Adjusted font size for mobile */
+    font-size: 1.2em; /* Adjusted font size for mobile */
     margin: 10px;
     cursor: pointer;
     border: none;
@@ -42,12 +44,12 @@ button {
 }
 
 #yesButton {
-    background-color: #28a745;
+    background-color: #ff69b4; /* Hot pink for the Yes button */
     color: #fff;
 }
 
 #noButton {
-    background-color: #dc3545;
+    background-color: #ff1493; /* Deep pink for the No button */
     color: #fff;
 }
 
@@ -58,3 +60,17 @@ button:hover {
 
 #customMessage {
     font-size: 1.5em;
+    color: #800000; /* Dark red for the custom message */
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em; /* Further adjust font size for smaller screens */
+    }
+
+    #customMessage {
+        font-size: 1.2em; /* Adjust message font size for mobile */
+    }
+}
