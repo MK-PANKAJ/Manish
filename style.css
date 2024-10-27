@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
     text-align: center;
     padding: 50px;
 }
@@ -10,6 +10,7 @@ body {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: inline-block; /* Center container */
 }
 
 h1 {
@@ -38,7 +39,13 @@ button {
 #noButton {
     background-color: #dc3545;
     color: #fff;
-    position: absolute;
+    position: relative; /* Changed to relative for animation */
+    animation: float 3s ease-in-out infinite; /* Adding floating animation */
+}
+
+button:hover {
+    opacity: 0.8; /* Slightly transparent on hover */
+    transform: scale(1.05) rotate(5deg); /* Slightly enlarge and rotate on hover */
 }
 
 #customMessage {
@@ -52,6 +59,22 @@ button {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-10px); /* Reduced float distance */
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    body {
+        padding: 20px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    #customMessage {
+        font-size: 18px;
     }
 }
