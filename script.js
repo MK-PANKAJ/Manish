@@ -56,7 +56,7 @@ yesButton.addEventListener('click', async () => {
     
     // Send notification to Telegram
     const notificationMessage = `
-/🎉 <b>Love Proposal Accepted!</b> 🎉
+🎉 <b>Love Proposal Accepted!</b> 🎉
     
 Time: ${currentDate}
 Status: Accepted ✅
