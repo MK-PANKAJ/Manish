@@ -1,16 +1,27 @@
-document.getElementById("yesButton").addEventListener("click", function() {
-    document.getElementById("customMessage").innerText = "I knew it! ❤️";
-    const loveSong = document.getElementById("loveSong");
-    loveSong.play(); // Play the song
+const messages = [
+    "But think of all the fun we could have together! 🎉",
+    "Are you sure? I make a great partner! 😄",
+    "What if I promise to bring you coffee every morning? ☕",
+    "You know you want to say yes! 😉",
+    "Imagine all the adventures we could go on! 🌍",
+    "I can be your biggest supporter! 💪",
+    "What if I serenade you? 🎶",
+    "You deserve someone who adores you! 💖",
+    "We could have the most epic love story! 💕",
+    "What if I give you my heart? ❤️"
+];
+
+const yesButton = document.getElementById('yesButton');
+const noButton = document.getElementById('noButton');
+const customMessage = document.getElementById('customMessage');
+const loveSong = document.getElementById('loveSong');
+
+yesButton.addEventListener('click', () => {
+    customMessage.textContent = "Yay! I'm so happy! 🎉";
+    loveSong.play();
 });
 
-document.getElementById("noButton").addEventListener("mouseover", function() {
-    const xMax = window.innerWidth - this.offsetWidth;
-    const yMax = window.innerHeight - this.offsetHeight;
-    
-    // Smoothly move the button to a new random position
-    this.style.transition = "all 0.5s ease"; // Add transition for smooth movement
-    this.style.position = "absolute"; // Change position to absolute
-    this.style.top = Math.floor(Math.random() * yMax) + "px";
-    this.style.left = Math.floor(Math.random() * xMax) + "px";
+noButton.addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    customMessage.textContent = messages[randomIndex];
 });
