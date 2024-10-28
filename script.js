@@ -58,9 +58,9 @@ noButton.addEventListener('click', () => {
     
     // If the user clicks No 5 times, show a special message
     if (noButtonClickCount >= maxNoClicks)
-noButton.disabled = true;
-        noButton.textContent = "No (Disabled)";
- {
+{noButton.disabled = true
+       noButton.style.transform = `scale(1) '
+ 
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
     }
 });
