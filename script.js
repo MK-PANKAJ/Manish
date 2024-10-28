@@ -15,7 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-    
+
 const messages = [
     "Are you absolutely sure? 🥺",
     "Pretty please? 💝",
@@ -38,7 +38,10 @@ const customMessage = document.getElementById('customMessage');
 const loveSong = document.getElementById('loveSong');
 const container = document.querySelector('.container');
 
-yesButton.addEventListener('click', async () => {
+// Function to handle the "Yes" button click
+const handleYesButtonClick = async () => {
+    console.log("Yes button clicked!");
+
     // Show success message and play the song
     container.innerHTML = `
         <h1>Yay! I Love You Too! ❤️</h1>
@@ -53,7 +56,21 @@ yesButton.addEventListener('click', async () => {
         console.error("Error playing audio:", error);
         customMessage.textContent = "Oops! It seems the love song couldn't be played. 🎶";
     }
-});
+
+    // Add a document to Firestore
+    try {
+        const docRef = await addDoc(collection(db, "responses"), {
+            response: "Yes",
+            timestamp: new Date()
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+};
+
+// Add event listener for the Yes button
+yesButton.addEventListener('click', handleYesButtonClick);
 
 noButton.addEventListener('click', () => {
     noButtonClickCount++;
@@ -78,33 +95,4 @@ noButton.addEventListener('click', () => {
     if (noButtonClickCount >= maxNoClicks) {
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
     }
-// Function to handle the "Yes" button click
-const handleYesButtonClick = async () => {
-    console.log("Yes button clicked!");
-
-    // Example: Add a document to Firestore
-    try {
-        const docRef = await addDoc(collection(db, "responses"), {
-            response: "Yes",
-            timestamp: new Date()
-        });
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
-    const handleYesButtonClick = async () => {
-    console.log("Yes button clicked!");
-
-    try {
-        const docRef = await addDoc(collection(db, "responses"), {
-            response: "Yes",
-            timestamp: new Date()
-        });
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
-};
 });
-// Get the button element and add an event listener
-document.getElementById('yesButton').addEventListener('click', handleYesButtonClick);
