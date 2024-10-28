@@ -57,7 +57,7 @@ noButton.addEventListener('click', () => {
     customMessage.textContent = messages[randomIndex];
     
     // If the user clicks No 5 times, show a special message
-    if (noButtonClickCount >= maxNoClicks) {
+    {if (noButtonClickCount >= maxNoClicks) 
         noButton.disabled = true;
         noButton.style.transform = `scale(${scale * 0.01})`; // Scale down the button
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
