@@ -1,3 +1,17 @@
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAPTQJJBRozGiYmjgkdfajnCXsHTQd5gAQ",
+    authDomain: "my-telegram-bot-31d58.firebaseapp.com",
+    projectId: "my-telegram-bot-31d58",
+    storageBucket: "my-telegram-bot-31d58.appspot.com",
+    messagingSenderId: "329263409265",
+    appId: "1:329263409265:web:18126ad64fd2ac5e5993d0"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();// Your web app's Firebase configuration
+    
 const messages = [
     "Are you absolutely sure? 🥺",
     "Pretty please? 💝",
@@ -60,4 +74,9 @@ noButton.addEventListener('click', () => {
     if (noButtonClickCount >= maxNoClicks) {
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
     }
+        // Store the click count in Firestore
+    await db.collection('clickCounts').doc('userClicks').set({
+        noButtonClickCount: noButtonClickCount
+    }, { merge: true });
+});
 });
