@@ -1,21 +1,3 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAPTQJJBRozGiYmjgkdfajnCXsHTQd5gAQ",
-    authDomain: "my-telegram-bot-31d58.firebaseapp.com",
-    projectId: "my-telegram-bot-31d58",
-    storageBucket: "my-telegram-bot-31d58.appspot.com",
-    messagingSenderId: "329263409265",
-    appId: "1:329263409265:web:18126ad64fd2ac5e5993d0"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 const messages = [
     "Are you absolutely sure? 🥺",
     "Pretty please? 💝",
@@ -38,10 +20,7 @@ const customMessage = document.getElementById('customMessage');
 const loveSong = document.getElementById('loveSong');
 const container = document.querySelector('.container');
 
-// Function to handle the "Yes" button click
-const handleYesButtonClick = async () => {
-    console.log("Yes button clicked!");
-
+yesButton.addEventListener('click', async () => {
     // Show success message and play the song
     container.innerHTML = `
         <h1>Yay! I Love You Too! ❤️</h1>
@@ -56,21 +35,7 @@ const handleYesButtonClick = async () => {
         console.error("Error playing audio:", error);
         customMessage.textContent = "Oops! It seems the love song couldn't be played. 🎶";
     }
-
-    // Add a document to Firestore
-    try {
-        const docRef = await addDoc(collection(db, "responses"), {
-            response: "Yes",
-            timestamp: new Date()
-        });
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
-};
-
-// Add event listener for the Yes button
-yesButton.addEventListener('click', handleYesButtonClick);
+});
 
 noButton.addEventListener('click', () => {
     noButtonClickCount++;
