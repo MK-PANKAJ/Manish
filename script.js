@@ -92,6 +92,19 @@ const handleYesButtonClick = async () => {
     } catch (e) {
         console.error("Error adding document: ", e);
     }
+    const handleYesButtonClick = async () => {
+    console.log("Yes button clicked!");
+
+    try {
+        const docRef = await addDoc(collection(db, "responses"), {
+            response: "Yes",
+            timestamp: new Date()
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+};
 });
 // Get the button element and add an event listener
 document.getElementById('yesButton').addEventListener('click', handleYesButtonClick);
