@@ -26,5 +26,24 @@
     
     <audio id="loveSong" src="Agar Ho Tum_320(PagalWorld.com.sb).mp3" preload="auto"></audio>
     <script src="script.js"></script>
+<script>
+        document.getElementById('yesButton').addEventListener('click', function() {
+            fetch('https://your-host-website.github.io/notify', { // Change to the actual host URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ response: 'yes' })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Notification sent successfully!');
+                } else {
+                    console.error('Error sending notification.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
