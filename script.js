@@ -12,7 +12,7 @@ const messages = [
 ];
 
 let noButtonClickCount = 0;
-const maxNoClicks = 9;
+const maxNoClicks = 5;
 
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
@@ -57,7 +57,10 @@ noButton.addEventListener('click', () => {
     customMessage.textContent = messages[randomIndex];
     
     // If the user clicks No 5 times, show a special message
-    if (noButtonClickCount >= maxNoClicks) {
+    if (noButtonClickCount >= maxNoClicks)
+noButton.disabled = true;
+        noButton.textContent = "No (Disabled)";
+ {
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
     }
 });
