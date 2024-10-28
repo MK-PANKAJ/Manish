@@ -1,3 +1,7 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAPTQJJBRozGiYmjgkdfajnCXsHTQd5gAQ",
@@ -9,8 +13,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();// Your web app's Firebase configuration
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
     
 const messages = [
     "Are you absolutely sure? 🥺",
@@ -74,9 +78,20 @@ noButton.addEventListener('click', () => {
     if (noButtonClickCount >= maxNoClicks) {
         customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
     }
-        // Store the click count in Firestore
-    await db.collection('clickCounts').doc('userClicks').set({
-        noButtonClickCount: noButtonClickCount
-    }, { merge: true });
+// Function to handle the "Yes" button click
+const handleYesButtonClick = async () => {
+    console.log("Yes button clicked!");
+
+    // Example: Add a document to Firestore
+    try {
+        const docRef = await addDoc(collection(db, "responses"), {
+            response: "Yes",
+            timestamp: new Date()
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 });
-});
+// Get the button element and add an event listener
+document.getElementById('yesButton').addEventListener('click', handleYesButtonClick);
