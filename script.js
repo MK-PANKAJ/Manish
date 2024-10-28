@@ -12,7 +12,7 @@ const messages = [
 ];
 
 let noButtonClickCount = 0;
-const maxNoClicks = 8;
+const maxNoClicks = 9;
 
 const yesButton = document.getElementById('yesButton');
 const noButton = document.getElementById('noButton');
