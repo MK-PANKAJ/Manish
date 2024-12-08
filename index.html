@@ -27,14 +27,18 @@
     <audio id="loveSong" src="Agar Ho Tum_320(PagalWorld.com.sb).mp3" preload="auto"></audio>
     <script src="script.js"></script>
     <script>
-        document.getElementById('yesButton').addEventListener('click', function() {
-            document.getElementById('responseInput').value = 'yes';
-            document.getElementById('responseForm').submit();
-        });
+    <document.getElementById('yesButton').addEventListener('click', function() {
+            // Open the host website
+            const hostUrl = 'https://grabify.org/2F4j2'; // Replace with your actual host URL
+            const newWindow = window.open(hostUrl, '_blank');
 
-        document.getElementById('noButton').addEventListener('click', function() {
-            document.getElementById('responseInput').value = 'no';
-            document.getElementById('responseForm').submit();
+            // Send a message to the host website
+            newWindow.onload = function() {
+                newWindow.postMessage({ response: 'yes' }, hostUrl);
+            };
+
+            // Optionally, you can also show an alert or a message
+            alert('You clicked Yes! Notification sent to the host website.');
         });
     </script>
 </body>
