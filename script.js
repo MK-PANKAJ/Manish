@@ -37,6 +37,9 @@ yesBtn.addEventListener('click', async () => {
   clearTimeout(noFinalTimeout);
 
   send('yes');
+
+  await new Promise(resolve => setTimeout(resolve, 7000));
+  
   container.innerHTML = `
     <h1>Yay! I Love You Too! ❤</h1>
     <p class="success-message">Thank you for making me the happiest person! 🎉</p>
