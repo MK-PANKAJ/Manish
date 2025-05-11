@@ -8,7 +8,9 @@ const noBtn         = document.getElementById('noButton');
 
 let noButtonClickCount = 0;
 const maxNoClicks = 5;
-let noTimeout = null;
+let noInitialTimeout = null;
+let noCountdownInterval = null;
+let noFinalTimeout = null;
 const messages = [
   "Are you absolutely sure? 🥺", 
   "Pretty please? 💝",
@@ -29,11 +31,10 @@ function send(ans) {
 
 // YES button behavior
 yesBtn.addEventListener('click', async () => {
-  // Cancel any pending noTimeout
-  if (noTimeout) {
-    clearTimeout(noTimeout);
-    noTimeout = null;
-  }
+  // Cancel any pending timeouts/intervals
+  clearTimeout(noInitialTimeout);
+  clearInterval(noCountdownInterval);
+  clearTimeout(noFinalTimeout);
 
   send('yes');
   container.innerHTML = `
@@ -76,16 +77,33 @@ noBtn.addEventListener('click', e => {
     ];
 
   } else {
-    // On reaching max clicks: prompt delay
-    customMessage.textContent = 
-      "Alright... I'll accept 'No' in 10 seconds unless you tap 'Yes'! ⏳";
-    // Disable further dodging
+    // On reaching max clicks: initial flash message
     noBtn.disabled = true;
-    noBtn.style.transform = `scale(1)`;
+    yesBtn.style.transform = `scale(1)`;
+    customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
 
-    // Start countdown to send 'no'
-    noTimeout = setTimeout(() => {
-      send('no');
-    }, 10000); // 10,000 ms = 10 seconds
+    // Wait 5 seconds before starting countdown
+    noInitialTimeout = setTimeout(() => {
+      let countdown = 10;
+      customMessage.textContent =
+        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Accepting ‘No’ in ${countdown}…`;
+
+      // Update countdown every second
+      noCountdownInterval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          customMessage.textContent =
+            `Welp, you leave me no choice… My tears start falling in ${countdown} seconds. 😢 Accepting ‘No’ in ${countdown}…`;
+        } else {
+          clearInterval(noCountdownInterval);
+        }
+      }, 1000);
+
+      // After countdown, send 'no'
+      noFinalTimeout = setTimeout(() => {
+        send('no');
+      }, (countdown + 1) * 1000);
+
+    }, 5000);
   }
 });
