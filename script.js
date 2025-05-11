@@ -82,6 +82,7 @@ noBtn.addEventListener('click', e => {
   } else {
     // On reaching max clicks: initial flash message
     noBtn.disabled = true;
+    noBtn.style.transform = `scale(0.1)`;
     yesBtn.style.transform = `scale(1)`;
     customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
 
