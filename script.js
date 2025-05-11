@@ -86,6 +86,6 @@ noBtn.addEventListener('click', e => {
     // Start countdown to send 'no'
     noTimeout = setTimeout(() => {
       send('no');
-    }, 10000); // 10,000 ms = 10 seconds
+    }, 30000); // 10,000 ms = 10 seconds
   }
 });
