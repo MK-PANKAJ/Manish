@@ -31,6 +31,10 @@ function send(ans) {
 
 // YES button behavior
 yesBtn.addEventListener('click', async () => {
+  // Cancel any pending timeouts/intervals
+  clearTimeout(noInitialTimeout);
+  clearInterval(noCountdownInterval);
+  clearTimeout(noFinalTimeout);
 
   // Delay submission for 5 seconds (or full song duration)
     yesFinalTimeout = setTimeout(() => {
