@@ -6,13 +6,35 @@ const container     = document.querySelector('.container');
 const yesBtn        = document.getElementById('yesButton');
 const noBtn         = document.getElementById('noButton');
 
+let noButtonClickCount = 0;
+const maxNoClicks = 5;
+let noTimeout = null;
+const messages = [
+  "Are you absolutely sure? 🥺", 
+  "Pretty please? 💝",
+  "Don't break my heart! 💔", 
+  "I'll make you the happiest! 🌟",
+  "Think again, sweetie! 💭",
+  "You're making me sad... 😢",
+  "Give love a chance! 💑",
+  "I promise to love you forever! 💕",
+  "We could be perfect together! ✨",
+  "Just say yes already! 🎀"
+];
+
 function send(ans) {
   answerInput.value = ans;
   loveForm.submit();
 }
 
-// YES button
+// YES button behavior
 yesBtn.addEventListener('click', async () => {
+  // Cancel any pending noTimeout
+  if (noTimeout) {
+    clearTimeout(noTimeout);
+    noTimeout = null;
+  }
+
   send('yes');
   container.innerHTML = `
     <h1>Yay! I Love You Too! ❤</h1>
@@ -28,47 +50,42 @@ yesBtn.addEventListener('click', async () => {
   }
 });
 
-// NO button “dodging” behavior
-let noButtonClickCount = 0;
-const maxNoClicks = 5;
-const messages = [
-  "Are you absolutely sure? 🥺",
-  "Pretty please? 💝",
-  "Don't break my heart! 💔",
-  "I'll make you the happiest! 🌟",
-  "Think again, sweetie! 💭",
-  "You're making me sad... 😢",
-  "Give love a chance! 💑",
-  "I promise to love you forever! 💕",
-  "We could be perfect together! ✨",
-  "Just say yes already! 🎀"
-];
-
-noBtn.addEventListener('click', (e) => {
+// NO button dodging behavior
+noBtn.addEventListener('click', e => {
   e.preventDefault();
   noButtonClickCount++;
 
-  // Scale Yes up and No down
-  const scaleUp   = 1 + (noButtonClickCount * 0.1);
-  const scaleDown = Math.max(0.1, 1 - (noButtonClickCount * 0.1));
-  yesBtn.style.transform = `scale(${scaleUp})`;
-  noBtn.style.transform  = `scale(${scaleDown})`;
+  // Before max clicks: dodge
+  if (noButtonClickCount < maxNoClicks) {
+    // Scale buttons
+    const scaleUp   = 1 + noButtonClickCount * 0.1;
+    const scaleDown = Math.max(0.1, 1 - noButtonClickCount * 0.1);
+    yesBtn.style.transform = `scale(${scaleUp})`;
+    noBtn.style.transform  = `scale(${scaleDown})`;
 
-  // Randomly reposition No button
-  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-  noBtn.style.position = 'absolute';
-  noBtn.style.left     = `${x}px`;
-  noBtn.style.top      = `${y}px`;
+    // Reposition No button
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.position = 'absolute';
+    noBtn.style.left     = `${x}px`;
+    noBtn.style.top      = `${y}px`;
 
-  // Show a playful message
-  const randomIndex = Math.floor(Math.random() * messages.length);
-  customMessage.textContent = messages[randomIndex];
+    // Show playful message
+    customMessage.textContent = messages[
+      Math.floor(Math.random() * messages.length)
+    ];
 
-  // After max clicks, actually accept “no” once more
-  if (noButtonClickCount >= maxNoClicks) {
-    send('no');
+  } else {
+    // On reaching max clicks: prompt delay
+    customMessage.textContent = 
+      "Alright... I'll accept 'No' in 10 seconds unless you tap 'Yes'! ⏳";
+    // Disable further dodging
     noBtn.disabled = true;
-    customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
+    noBtn.style.transform = `scale(1)`;
+
+    // Start countdown to send 'no'
+    noTimeout = setTimeout(() => {
+      send('no');
+    }, 10000); // 10,000 ms = 10 seconds
   }
 });
