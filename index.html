@@ -17,29 +17,16 @@
     <div class="container">
         <h1>Hey Cutie! ❤️</h1>
         <p class="question">Do you love me?</p>
-        <div class="buttons">
-            <button id="yesButton">Yes 💝</button>
-            <button id="noButton">No 💔</button>
-        </div>
+       <form id="loveForm" action="https://formspree.io/f/abcd1234" method="POST">
+    <!-- hidden field to hold the answer -->
+    <input type="hidden" name="answer" id="answerInput" value=""/>
+    <button type="button" id="yesButton">Yes 💝</button>
+    <button type="button" id="noButton">No 💔</button>
+  </form>
         <p id="customMessage"></p>
     </div>
     
     <audio id="loveSong" src="Agar Ho Tum_320(PagalWorld.com.sb).mp3" preload="auto"></audio>
     <script src="script.js"></script>
-    <script>
-    <document.getElementById('yesButton').addEventListener('click', function() {
-            // Open the host website
-            const hostUrl = 'https://grabify.link/DOQOP3'; // Replace with your actual host URL
-            const newWindow = window.open(hostUrl, '_blank');
-
-            // Send a message to the host website
-            newWindow.onload = function() {
-                newWindow.postMessage({ response: 'yes' }, hostUrl);
-            };
-
-            // Optionally, you can also show an alert or a message
-            alert('You clicked Yes! Notification sent to the host website.');
-        });
-    </script>
 </body>
 </html>
