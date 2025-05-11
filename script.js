@@ -32,6 +32,10 @@ function send(ans) {
 // YES button behavior
 yesBtn.addEventListener('click', async () => {
 
+  // Delay submission for 5 seconds (or full song duration)
+    setTimeout(() => {
+      send('yes');
+    }, 5000); // You can adjust this to match song length
   container.innerHTML = `
     <h1>Yay! I Love You Too! ❤</h1>
     <p class="success-message">Thank you for making me the happiest person! 🎉</p>
@@ -40,14 +44,9 @@ yesBtn.addEventListener('click', async () => {
   `;
   try {
     await loveSong.play();
-    // Delay submission for 5 seconds (or full song duration)
-    setTimeout(() => {
-      send('yes');
-    }, 5000); // You can adjust this to match song length
   } catch (error) {
     console.error("Error playing audio:", error);
     customMessage.textContent = "Oops! It seems the love song couldn't be played. 🎶";
-    send('yes');
   }
 });
 
