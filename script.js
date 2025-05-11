@@ -108,6 +108,6 @@ noBtn.addEventListener('click', e => {
         send('no');
       }, (countdown + 1) * 1000);
 
-    }, 5000);
+    }, 3000);
   }
 });
