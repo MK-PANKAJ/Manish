@@ -33,7 +33,7 @@ function send(ans) {
 yesBtn.addEventListener('click', async () => {
 
   // Delay submission for 5 seconds (or full song duration)
-    noFinalTimeout = setTimeout(() => {
+    yesFinalTimeout = setTimeout(() => {
       send('yes');
     }, 5000); // You can adjust this to match song length
   
