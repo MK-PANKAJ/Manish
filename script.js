@@ -86,14 +86,14 @@ noBtn.addEventListener('click', e => {
     noInitialTimeout = setTimeout(() => {
       let countdown = 10;
       customMessage.textContent =
-        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Accepting ‘No’ in ${countdown}…`;
+        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Please say “Yes” in ${countdown}…`;
 
       // Update countdown every second
       noCountdownInterval = setInterval(() => {
         countdown--;
         if (countdown > 0) {
           customMessage.textContent =
-            `Welp, you leave me no choice… My tears start falling in ${countdown} seconds. 😢 Accepting ‘No’ in ${countdown}…`;
+            `Welp, you leave me no choice… My tears start falling in ${countdown} seconds. 😢 Please say “Yes” in ${countdown}…`;
         } else {
           clearInterval(noCountdownInterval);
         }
