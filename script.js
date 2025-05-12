@@ -2,6 +2,7 @@ const answerInput   = document.getElementById('answerInput');
 const loveForm      = document.getElementById('loveForm');
 const customMessage = document.getElementById('customMessage');
 const loveSong      = document.getElementById('loveSong');
+const calmSong      = document.getElementById('calmSong');
 const container     = document.querySelector('.container');
 const yesBtn        = document.getElementById('yesButton');
 const noBtn         = document.getElementById('noButton');
@@ -109,5 +110,19 @@ noBtn.addEventListener('click', e => {
       }, (countdown + 1) * 1000);
 
     }, 2500);
-  }
+    
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+container.innerHTML = `
+  <h1>It's Okay ❤️</h1>
+  <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
+  <p class="custom-message">Wishing you happiness and love always. 🌟</p>
+  <div class="calm-response"></div>
+`;
+try {
+  await calmSong.play();
+} catch (error) {
+  console.error("Error playing audio:", error);
+  customMessage.textContent = "It's okay — music or not, life goes on beautifully. 🎵";
+}
 });
