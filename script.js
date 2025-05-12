@@ -117,7 +117,6 @@ container.innerHTML = `
   <h1>It's Okay ❤️</h1>
   <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
   <p class="custom-message">Wishing you happiness and love always. 🌟</p>
-  <div class="calm-response"></div>
 `;
 try {
   await calmSong.play();
