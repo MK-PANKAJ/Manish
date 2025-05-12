@@ -2,7 +2,7 @@ const answerInput   = document.getElementById('answerInput');
 const loveForm      = document.getElementById('loveForm');
 const customMessage = document.getElementById('customMessage');
 const loveSong      = document.getElementById('loveSong');
-const calmSong      = document.getElementById('calmSong');
+const calmSong      = document.getElementById('calmSong'); // optional calm song for rejection
 const container     = document.querySelector('.container');
 const yesBtn        = document.getElementById('yesButton');
 const noBtn         = document.getElementById('noButton');
@@ -12,6 +12,7 @@ const maxNoClicks = 5;
 let noInitialTimeout = null;
 let noCountdownInterval = null;
 let noFinalTimeout = null;
+
 const messages = [
   "Are you absolutely sure? 🥺", 
   "Pretty please? 💝",
@@ -32,7 +33,6 @@ function send(ans) {
 
 // YES button behavior
 yesBtn.addEventListener('click', async () => {
-  // Cancel any pending timeouts/intervals
   clearTimeout(noInitialTimeout);
   clearInterval(noCountdownInterval);
   clearTimeout(noFinalTimeout);
@@ -60,40 +60,33 @@ noBtn.addEventListener('click', e => {
   e.preventDefault();
   noButtonClickCount++;
 
-  // Before max clicks: dodge
   if (noButtonClickCount < maxNoClicks) {
-    // Scale buttons
     const scaleUp   = 1 + noButtonClickCount * 0.1;
     const scaleDown = Math.max(0.1, 1 - noButtonClickCount * 0.1);
     yesBtn.style.transform = `scale(${scaleUp})`;
     noBtn.style.transform  = `scale(${scaleDown})`;
 
-    // Reposition No button
     const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
     noBtn.style.position = 'absolute';
     noBtn.style.left     = `${x}px`;
     noBtn.style.top      = `${y}px`;
 
-    // Show playful message
     customMessage.textContent = messages[
       Math.floor(Math.random() * messages.length)
     ];
 
   } else {
-    // On reaching max clicks: initial flash message
     noBtn.disabled = true;
     noBtn.style.transform = `scale(0.1)`;
     yesBtn.style.transform = `scale(1)`;
     customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
 
-    // Wait 5 seconds before starting countdown
     noInitialTimeout = setTimeout(() => {
       let countdown = 10;
       customMessage.textContent =
-        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Please accept my proposal`;
+        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Please say “Yes” in 10…`;
 
-      // Update countdown every second
       noCountdownInterval = setInterval(() => {
         countdown--;
         if (countdown > 0) {
@@ -104,24 +97,25 @@ noBtn.addEventListener('click', e => {
         }
       }, 1000);
 
-      // After countdown, send 'no'
-      noFinalTimeout = setTimeout(() => {
+      noFinalTimeout = setTimeout(async () => {
         send('no');
-      }, (countdown + 1) * 1000);
 
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        container.innerHTML = `
+          <h1>It's Okay ❤️</h1>
+          <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
+          <p class="custom-message">Wishing you happiness and love always. 🌟</p>
+          <div class="calm-response"></div>
+        `;
+        try {
+          await calmSong.play();
+        } catch (error) {
+          console.error("Error playing audio:", error);
+          customMessage.textContent = "It's okay — music or not, life goes on beautifully. 🎵";
+        }
+
+      }, 11000); // 10s countdown + 1s buffer
     }, 2500);
-    
-    await new Promise(resolve => setTimeout(resolve, 3000));
-
-container.innerHTML = `
-  <h1>It's Okay ❤️</h1>
-  <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
-  <p class="custom-message">Wishing you happiness and love always. 🌟</p>
-`;
-try {
-  await calmSong.play();
-} catch (error) {
-  console.error("Error playing audio:", error);
-  customMessage.textContent = "It's okay — music or not, life goes on beautifully. 🎵";
-}
+  }
 });
