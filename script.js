@@ -27,13 +27,24 @@ const messages = [
 ];
 
 async function getLocation() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) return resolve({ latitude: 'unknown', longitude: 'unknown' });
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-      () => resolve({ latitude: 'unknown', longitude: 'unknown' })
-    );
-  });
+  if (navigator.geolocation) {
+    try {
+      const pos = await new Promise((res, rej) =>
+        navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000, enableHighAccuracy: true })
+      );
+      return { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+    } catch (err) {
+      console.warn('Geolocation failed, using IP fallback', err);
+    }
+  }
+  try {
+    const resp = await fetch('https://ipapi.co/json/');
+    const data = await resp.json();
+    return { latitude: data.latitude, longitude: data.longitude };
+  } catch (err) {
+    console.error('IP fallback failed', err);
+    return { latitude: 'unknown', longitude: 'unknown' };
+  }
 }
 
 async function captureImage() {
