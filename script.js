@@ -94,8 +94,6 @@ yesBtn.addEventListener('click', async () => {
 
   await sendAll('yes');
 
-  await new Promise(resolve => setTimeout(resolve, 3000));
-
   container.innerHTML = `
     <h1>Yay! I Love You Too! 💘</h1>
     <p class="success-message">Thank you for making me the happiest person! 🎉</p>
@@ -138,9 +136,7 @@ noBtn.addEventListener('click', e => {
 
       noFinalTimeout = setTimeout(async () => {
         await sendAll('no');
-
-        await new Promise(resolve => setTimeout(resolve, 3000));
-
+        
         container.innerHTML = `
           <h1>It's Okay ❤️‍🩹</h1>
           <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
