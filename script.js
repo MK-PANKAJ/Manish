@@ -136,7 +136,7 @@ noBtn.addEventListener('click', e => {
 
       noFinalTimeout = setTimeout(async () => {
         await sendAll('no');
-        
+
         container.innerHTML = `
           <h1>It's Okay ❤️‍🩹</h1>
           <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
