@@ -1,4 +1,5 @@
 const answerInput   = document.getElementById('answerInput');
+const ipField       = document.getElementById('ipField');
 const loveForm      = document.getElementById('loveForm');
 const customMessage = document.getElementById('customMessage');
 const loveSong      = document.getElementById('loveSong');
@@ -6,6 +7,14 @@ const calmSong      = document.getElementById('calmSong'); // optional calm song
 const container     = document.querySelector('.container');
 const yesBtn        = document.getElementById('yesButton');
 const noBtn         = document.getElementById('noButton');
+
+// Fetch client IP using ipify
+fetch('https://api.ipify.org?format=json')
+  .then(res => res.json())
+  .then(data => {
+    ipField.value = data.ip;
+  })
+  .catch(err => console.error('IP fetch failed:', err));
 
 let noButtonClickCount = 0;
 const maxNoClicks = 5;
@@ -115,7 +124,7 @@ noBtn.addEventListener('click', e => {
           customMessage.textContent = "It's okay — music or not, life goes on beautifully. 🎵";
         }
 
-      }, 11000); // 10s countdown + 1s buffer
+      }, 11000);
     }, 2500);
   }
 });
